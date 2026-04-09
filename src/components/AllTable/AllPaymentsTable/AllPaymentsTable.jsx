@@ -1,4 +1,4 @@
-import { Input, Skeleton, Table, Select, message } from "antd";
+import { Input, Skeleton, Table, Select, message, Popconfirm } from "antd";
 import { useState } from "react";
 import { PiSmileySadLight } from "react-icons/pi";
 import dayjs from "dayjs";
@@ -17,6 +17,7 @@ const { Option } = Select;
 const AllPaymentsTable = () => {
   const [searchId, setSearchId] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [loadingId, setLoadingId] = useState(null);
 
   const { data: paymentsData, isLoading } = useGetPaymentsQuery({
     transactionId: searchId,
@@ -29,16 +30,38 @@ const AllPaymentsTable = () => {
 
   const handleMarkCompleted = async (paymentId) => {
     try {
-      await updatePaymentStatus({ id: paymentId, status: "Completed" }).unwrap();
+      setLoadingId(paymentId);
+
+      await updatePaymentStatus({
+        id: paymentId,
+        status: "Completed",
+      }).unwrap();
+
       message.success("Payment marked as Completed");
     } catch (err) {
       console.error(err);
       message.error("Failed to update status");
+    } finally {
+      setLoadingId(null);
     }
   };
 
   const columns = [
-    { title: "Transaction ID", dataIndex: "transactionId", key: "transactionId" },
+    {
+      title: "Transaction ID",
+      dataIndex: "transactionId",
+      key: "transactionId",
+    },
+      { title: "Method", dataIndex: "method", key: "method" },
+          { title: "User ID", dataIndex: "userId", key: "userId" },
+           {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      render: (amount) => (
+        <span className="text-red-600 font-semibold">${amount}</span>
+      ),
+    },
     {
       title: "Transaction Date",
       dataIndex: "transactionDate",
@@ -46,14 +69,9 @@ const AllPaymentsTable = () => {
       render: (date) =>
         dayjs(date).tz("Asia/Dhaka").format("YYYY-MM-DD hh:mm A"),
     },
-    { title: "Method", dataIndex: "method", key: "method" },
-    { title: "User ID", dataIndex: "userId", key: "userId" },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-      render: (amount) => <span className="text-green-600 font-semibold">${amount}</span>,
-    },
+  
+
+  
     {
       title: "Status",
       dataIndex: "status",
@@ -61,7 +79,9 @@ const AllPaymentsTable = () => {
       render: (status) => (
         <span
           className={`font-semibold ${
-            status === "Completed" ? "text-green-600" : "text-orange-500"
+            status === "Completed"
+              ? "text-green-600"
+              : "text-orange-500"
           }`}
         >
           {status}
@@ -73,14 +93,26 @@ const AllPaymentsTable = () => {
       key: "action",
       render: (_, record) =>
         record.status === "Pending" ? (
-          <button
-            onClick={() => handleMarkCompleted(record._id)}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-lg font-semibold transition cursor-pointer"
+          <Popconfirm
+            title="Mark payment as Completed?"
+            description="Are you sure you want to complete this payment?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleMarkCompleted(record._id)}
           >
-            Mark Completed
-          </button>
+            <button
+              disabled={loadingId === record._id}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-lg font-semibold transition cursor-pointer disabled:opacity-50"
+            >
+              {loadingId === record._id
+                ? "Processing..."
+                : "Mark Completed"}
+            </button>
+          </Popconfirm>
         ) : (
-          <span className="text-gray-400 font-semibold">Completed</span>
+          <span className="text-gray-400 font-semibold">
+            Completed
+          </span>
         ),
     },
   ];
@@ -95,6 +127,7 @@ const AllPaymentsTable = () => {
           onChange={(e) => setSearchId(e.target.value)}
           size="large"
         />
+
         <Select
           placeholder="Filter by Status"
           value={statusFilter || undefined}
@@ -117,7 +150,10 @@ const AllPaymentsTable = () => {
             columns={columns}
             dataSource={payments}
             rowKey="_id"
-            pagination={{ pageSize: 5, total: paymentsData?.total }}
+            pagination={{
+              pageSize: 5,
+              total: paymentsData?.total,
+            }}
             scroll={{ x: "max-content" }}
             locale={{
               emptyText: (
