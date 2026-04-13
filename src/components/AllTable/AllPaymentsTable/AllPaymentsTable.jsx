@@ -1,4 +1,5 @@
-import { Input, Skeleton, Table, Select, message, Popconfirm } from "antd";
+import { Input, Skeleton, Table, Select, message, Popconfirm, Tooltip } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { PiSmileySadLight } from "react-icons/pi";
 import dayjs from "dayjs";
@@ -8,6 +9,7 @@ import {
   useGetPaymentsQuery,
   useUpdatePaymentStatusMutation,
 } from "../../../redux/services/paymentsApiServices/paymentsApiServices";
+import { FaRegCopy } from "react-icons/fa";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -27,6 +29,12 @@ const AllPaymentsTable = () => {
   const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
 
   const payments = paymentsData?.data || [];
+
+  // ✅ Copy Function
+  const handleCopy = (text, label) => {
+    navigator.clipboard.writeText(text);
+    message.success(`${label} copied`);
+  };
 
   const handleMarkCompleted = async (paymentId) => {
     try {
@@ -51,27 +59,67 @@ const AllPaymentsTable = () => {
       title: "Transaction ID",
       dataIndex: "transactionId",
       key: "transactionId",
+      render: (transactionId) => (
+        <div className="flex items-center gap-2">
+          <span>{transactionId}</span>
+
+          <Tooltip title="Copy Transaction ID">
+            <FaRegCopy size={20}
+              onClick={() =>
+                handleCopy(transactionId, "Transaction ID")
+              }
+              className="cursor-pointer text-gray-500 hover:text-blue-500 transition"
+            />
+          </Tooltip>
+        </div>
+      ),
     },
-      { title: "Method", dataIndex: "method", key: "method" },
-          { title: "User ID", dataIndex: "userId", key: "userId" },
-           {
+
+    {
+      title: "Method",
+      dataIndex: "method",
+      key: "method",
+    },
+
+    {
+      title: "User ID",
+      dataIndex: "userId",
+      key: "userId",
+      render: (userId) => (
+        <div className="flex items-center gap-2">
+          <span>{userId}</span>
+
+          <Tooltip title="Copy User ID">
+            <FaRegCopy size={20}
+              onClick={() => handleCopy(userId, "User ID")}
+              className="cursor-pointer text-gray-500 hover:text-blue-500 transition"
+            />
+          </Tooltip>
+        </div>
+      ),
+    },
+
+    {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
       render: (amount) => (
-        <span className="text-red-600 font-semibold">${amount}</span>
+        <span className="text-red-600 font-semibold">
+          ${amount}
+        </span>
       ),
     },
+
     {
       title: "Transaction Date",
       dataIndex: "transactionDate",
       key: "transactionDate",
       render: (date) =>
-        dayjs(date).tz("Asia/Dhaka").format("YYYY-MM-DD hh:mm A"),
+        dayjs(date)
+          .tz("Asia/Dhaka")
+          .format("YYYY-MM-DD hh:mm A"),
     },
-  
 
-  
     {
       title: "Status",
       dataIndex: "status",
@@ -88,6 +136,7 @@ const AllPaymentsTable = () => {
         </span>
       ),
     },
+
     {
       title: "Action",
       key: "action",
@@ -98,7 +147,9 @@ const AllPaymentsTable = () => {
             description="Are you sure you want to complete this payment?"
             okText="Yes"
             cancelText="No"
-            onConfirm={() => handleMarkCompleted(record._id)}
+            onConfirm={() =>
+              handleMarkCompleted(record._id)
+            }
           >
             <button
               disabled={loadingId === record._id}
@@ -131,7 +182,9 @@ const AllPaymentsTable = () => {
         <Select
           placeholder="Filter by Status"
           value={statusFilter || undefined}
-          onChange={(value) => setStatusFilter(value || "")}
+          onChange={(value) =>
+            setStatusFilter(value || "")
+          }
           allowClear
           size="large"
           style={{ width: 200 }}
@@ -145,28 +198,26 @@ const AllPaymentsTable = () => {
       {isLoading ? (
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : (
-        <div className="overflow-x-auto">
-          <Table
-            columns={columns}
-            dataSource={payments}
-            rowKey="_id"
-            pagination={{
-              pageSize: 5,
-              total: paymentsData?.total,
-            }}
-            scroll={{ x: "max-content" }}
-            locale={{
-              emptyText: (
-                <div className="flex flex-col items-center justify-center py-10">
-                  <PiSmileySadLight className="text-3xl text-gray-400 mb-2" />
-                  <span className="font-bold text-gray-500 text-lg">
-                    Payment does not exist
-                  </span>
-                </div>
-              ),
-            }}
-          />
-        </div>
+        <Table
+          columns={columns}
+          dataSource={payments}
+          rowKey="_id"
+          pagination={{
+            pageSize: 5,
+            total: paymentsData?.total,
+          }}
+          scroll={{ x: "max-content" }}
+          locale={{
+            emptyText: (
+              <div className="flex flex-col items-center justify-center py-10">
+                <PiSmileySadLight className="text-3xl text-gray-400 mb-2" />
+                <span className="font-bold text-gray-500 text-lg">
+                  Payment does not exist
+                </span>
+              </div>
+            ),
+          }}
+        />
       )}
     </div>
   );

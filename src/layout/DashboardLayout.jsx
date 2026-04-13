@@ -7,8 +7,7 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <main className="font-urbanist min-h-screen bg-gray-50 relative">
-      
+    <main className="min-h-screen bg-gradient-to-br   flex">
       {/* Mobile top bar */}
       <div className="md:hidden flex items-center justify-between bg-white shadow-md px-4 py-3">
         <h1 className="text-lg font-bold">Dashboard</h1>
@@ -20,7 +19,7 @@ const DashboardLayout = () => {
         </button>
       </div>
 
-      <section className="grid grid-cols-12 gap-4">
+      <section className="grid grid-cols-12 gap-20">
         {/* Sidebar - desktop */}
         <div className="hidden md:block col-span-2 bg-white  rounded-md p-4">
           <DashboardMenu />
@@ -49,8 +48,32 @@ const DashboardLayout = () => {
         )}
 
         {/* Content area */}
-        <div className="col-span-12 md:col-span-10 px-4 md:px-5 py-6 md:py-10 rounded-md mt-4 md:mt-10">
-          <Outlet />
+        <div
+          className="
+    col-span-12 md:col-span-10
+    px-4 md:px-6 py-6 md:py-10
+    mt-4 md:mt-10
+h-[92vh]
+    rounded-3xl
+
+    bg-white/10
+    backdrop-blur-2xl
+    border border-white/20
+
+    shadow-2xl
+    shadow-purple-500/20
+
+    relative
+    overflow-hidden
+  "
+        >
+          {/* gradient glow layer */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-indigo-500/10 pointer-events-none" />
+
+          {/* inner content */}
+          <div className="relative z-10">
+            <Outlet />
+          </div>
         </div>
       </section>
     </main>
