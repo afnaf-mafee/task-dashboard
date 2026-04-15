@@ -63,7 +63,7 @@ const PayoutTable = () => {
   ];
 
   return (
-    <div className="p-4 bg-white rounded-xl shadow-md">
+    <div className="p-4 bg-white rounded-xl shadow-md mt-5">
       <h3 className="text-lg font-semibold mb-4">Payout History</h3>
       {isLoading ? (
         <Skeleton active paragraph={{ rows: 5 }} />

@@ -12,6 +12,8 @@ import Offer from "../pages/Offer/Offer";
 import Payout from "../pages/Payout/Payout";
 import Login from "../pages/Login/Login";
 import PrivateRoute from "./PrivateRoutex";
+import PayOutRequest from "../pages/PayOutRequtest/PayOutRequest";
+import BannerPage from "../pages/Banner/BannerPage";
 
 
 export const router = createBrowserRouter([
@@ -33,6 +35,8 @@ export const router = createBrowserRouter([
       { path: "gateway", element: <Gateway /> },
       { path: "offer", element: <Offer /> },
       { path: "payout", element: <Payout /> },
+      { path: "payout-request", element: <PayOutRequest /> },
+      { path: "banner", element: <BannerPage /> },
     ],
   },
   {

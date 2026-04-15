@@ -12,6 +12,8 @@ import {
   GiftOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
+import { TbCreditCardPay } from "react-icons/tb";
+import { FaRegImages } from "react-icons/fa";
 
 const DashboardMenu = () => {
   const dispatch = useDispatch();
@@ -28,9 +30,18 @@ const DashboardMenu = () => {
     { name: "User List", path: "/all-users", icon: <UserOutlined /> },
     { name: "Tasks", path: "/task", icon: <CheckSquareOutlined /> },
     { name: "Payments", path: "/all-payments", icon: <CreditCardOutlined /> },
-    { name: "Gateway", path: "/gateway", icon: <GatewayOutlined /> },
+  { name: "Gateway", path: "/gateway", icon: <GatewayOutlined /> },
     { name: "Offer", path: "/offer", icon: <GiftOutlined /> },
     { name: "Payout History", path: "/payout", icon: <HistoryOutlined /> },
+    {
+      name: "Payout Request",
+      path: "/payout-request",
+      icon: <TbCreditCardPay />,
+    },{
+      name: "Banner",
+      path: "/banner",
+      icon: <FaRegImages />,
+    },
   ];
 
   return (
