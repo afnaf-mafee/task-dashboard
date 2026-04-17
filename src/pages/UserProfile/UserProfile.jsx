@@ -110,6 +110,8 @@ const UserProfile = () => {
           <h2 className="text-xl ">{user?.email || user?.phone}</h2>
           <p className="mt-4  text-2xl font-semibold">
             Total Balance: ${user.available_balance}
+          </p> <p className="mt-4  text-2xl font-semibold">
+          Deposit Balance: ${user?.deposit_balance || 0}
           </p>
           {/* BUTTONS */}
           <div className="flex gap-3 mt-4 flex-wrap">

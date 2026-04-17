@@ -14,6 +14,7 @@ import Login from "../pages/Login/Login";
 import PrivateRoute from "./PrivateRoutex";
 import PayOutRequest from "../pages/PayOutRequtest/PayOutRequest";
 import BannerPage from "../pages/Banner/BannerPage";
+import Notification from "../pages/Notification/Notification";
 
 
 export const router = createBrowserRouter([
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
       { path: "payout", element: <Payout /> },
       { path: "payout-request", element: <PayOutRequest /> },
       { path: "banner", element: <BannerPage /> },
+      { path: "notification", element: <Notification /> },
     ],
   },
   {

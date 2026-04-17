@@ -2,7 +2,8 @@ import React, { useState, useMemo } from "react";
 import { Table, Skeleton, Input, Button, Popconfirm, Tag } from "antd";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
-
+import { Tooltip } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 import {
   useGetAllPayoutRequestsQuery,
   useUpdatePayoutStatusMutation,
@@ -42,6 +43,10 @@ const PayOutRequestTable = () => {
     );
   }, [searchText, tableData]);
 
+  const handleCopy = (text) => {
+  navigator.clipboard.writeText(text);
+  toast.success("User ID copied!");
+};
   // ✅ status update handler
   const handleStatusChange = async (id, status) => {
     try {
@@ -53,12 +58,24 @@ const PayOutRequestTable = () => {
   };
 
   const columns = [
-    {
-      title: "User ID",
-      dataIndex: "userId",
-      key: "userId",
-      sorter: (a, b) => a.userId.localeCompare(b.userId),
-    },
+  {
+  title: "User ID",
+  dataIndex: "userId",
+  key: "userId",
+  sorter: (a, b) => a.userId.localeCompare(b.userId),
+  render: (text) => (
+    <div className="flex items-center gap-2">
+      <span>{text}</span>
+
+      <Tooltip title="Copy">
+        <CopyOutlined
+          onClick={() => handleCopy(text)}
+          className="cursor-pointer text-gray-500 hover:text-blue-500"
+        />
+      </Tooltip>
+    </div>
+  ),
+},
     {
       title: "Wallet",
       dataIndex: "wallet",

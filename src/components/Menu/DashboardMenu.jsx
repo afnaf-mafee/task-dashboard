@@ -13,7 +13,7 @@ import {
   HistoryOutlined,
 } from "@ant-design/icons";
 import { TbCreditCardPay } from "react-icons/tb";
-import { FaRegImages } from "react-icons/fa";
+import { FaBell, FaRegBell, FaRegImages } from "react-icons/fa";
 
 const DashboardMenu = () => {
   const dispatch = useDispatch();
@@ -41,6 +41,10 @@ const DashboardMenu = () => {
       name: "Banner",
       path: "/banner",
       icon: <FaRegImages />,
+    },{
+      name: "Notification",
+      path: "/notification",
+      icon: <FaRegBell  />,
     },
   ];
 
@@ -82,7 +86,7 @@ const DashboardMenu = () => {
           </div>
 
           {/* MENU */}
-          <ul className="space-y-3 font-medium text-purple-950">
+          <ul className=" font-medium text-purple-950">
             {menuItems.map((item, index) => (
               <li key={index}>
                 <Link
