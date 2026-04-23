@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import { TbCreditCardPay } from "react-icons/tb";
 import { FaBell, FaRegBell, FaRegImages } from "react-icons/fa";
+import { MdOndemandVideo } from "react-icons/md";
 
 const DashboardMenu = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,10 @@ const DashboardMenu = () => {
       name: "Banner",
       path: "/banner",
       icon: <FaRegImages />,
+    },{
+      name: "Videos",
+      path: "/videos",
+      icon: <MdOndemandVideo />,
     },{
       name: "Notification",
       path: "/notification",

@@ -14,10 +14,10 @@ const paymentApiServices = baseApi.injectEndpoints({
     
     // ✅ Mutation to update payment status
     updatePaymentStatus: build.mutation({
-      query: ({ id, status }) => ({
+      query: ({ id, status ,amount, userId}) => ({
         url: `/payments/${id}`,
         method: "PATCH",
-        body: { status },
+        body: { status,amount,userId },
       }),
       invalidatesTags: ["AllPayments"], // refetch payments automatically
     }),

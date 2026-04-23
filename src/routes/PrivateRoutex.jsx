@@ -4,6 +4,7 @@ import useAuthData from "../hooks/useAuthData";
 const PrivateRoute = ({ children }) => {
   const { user ,token} = useAuthData();
 
+
   const location = useLocation();
 
   const isAuthenticated = token && user?.role;

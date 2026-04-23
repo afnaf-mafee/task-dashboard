@@ -12,8 +12,7 @@ import {
 const { Search } = Input;
 
 const PayOutRequestTable = () => {
-  const { data: payOutRequest, isLoading } =
-    useGetAllPayoutRequestsQuery();
+  const { data: payOutRequest, isLoading } = useGetAllPayoutRequestsQuery();
 
   const [updateStatus, { isLoading: actionLoading }] =
     useUpdatePayoutStatusMutation();
@@ -26,9 +25,7 @@ const PayOutRequestTable = () => {
     return payOutRequest?.data?.map((item) => ({
       key: item._id,
       ...item,
-      createdAt: dayjs(item.createdAt).format(
-        "YYYY-MM-DD hh:mm A"
-      ),
+      createdAt: dayjs(item.createdAt).format("YYYY-MM-DD hh:mm A"),
     }));
   }, [payOutRequest]);
 
@@ -37,16 +34,14 @@ const PayOutRequestTable = () => {
     if (!searchText) return tableData;
 
     return tableData?.filter((item) =>
-      item.userId
-        ?.toLowerCase()
-        .includes(searchText.toLowerCase())
+      item.userId?.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [searchText, tableData]);
 
   const handleCopy = (text) => {
-  navigator.clipboard.writeText(text);
-  toast.success("User ID copied!");
-};
+    navigator.clipboard.writeText(text);
+    toast.success("User ID copied!");
+  };
   // ✅ status update handler
   const handleStatusChange = async (id, status) => {
     try {
@@ -58,24 +53,24 @@ const PayOutRequestTable = () => {
   };
 
   const columns = [
-  {
-  title: "User ID",
-  dataIndex: "userId",
-  key: "userId",
-  sorter: (a, b) => a.userId.localeCompare(b.userId),
-  render: (text) => (
-    <div className="flex items-center gap-2">
-      <span>{text}</span>
+    {
+      title: "User ID",
+      dataIndex: "userId",
+      key: "userId",
+      sorter: (a, b) => a.userId.localeCompare(b.userId),
+      render: (text) => (
+        <div className="flex items-center gap-2">
+          <span>{text}</span>
 
-      <Tooltip title="Copy">
-        <CopyOutlined
-          onClick={() => handleCopy(text)}
-          className="cursor-pointer text-gray-500 hover:text-blue-500"
-        />
-      </Tooltip>
-    </div>
-  ),
-},
+          <Tooltip title="Copy">
+            <CopyOutlined
+              onClick={() => handleCopy(text)}
+              className="cursor-pointer text-gray-500 hover:text-blue-500"
+            />
+          </Tooltip>
+        </div>
+      ),
+    },
     {
       title: "Wallet",
       dataIndex: "wallet",
@@ -99,14 +94,17 @@ const PayOutRequestTable = () => {
         { text: "Personal", value: "personal" },
         { text: "Agent", value: "agent" },
       ],
-      onFilter: (value, record) =>
-        record.accountType === value,
+      onFilter: (value, record) => record.accountType === value,
     },
     {
       title: "Amount (৳)",
       dataIndex: "amount",
       key: "amount",
       sorter: (a, b) => a.amount - b.amount,
+      render: (amount) => {
+        const deductedAmount = amount - amount * 0.04;
+        return `৳ ${deductedAmount.toFixed(2)}`;
+      },
     },
 
     // ✅ STATUS COLUMN
@@ -119,8 +117,7 @@ const PayOutRequestTable = () => {
         { text: "Completed", value: "Completed" },
         { text: "Rejected", value: "Rejected" },
       ],
-      onFilter: (value, record) =>
-        record.status === value,
+      onFilter: (value, record) => record.status === value,
       render: (status) => {
         let color = "gold";
 
@@ -135,8 +132,7 @@ const PayOutRequestTable = () => {
       title: "Request Time",
       dataIndex: "createdAt",
       key: "createdAt",
-      sorter: (a, b) =>
-        new Date(a.createdAt) - new Date(b.createdAt),
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
     },
 
     // ✅ ACTION COLUMN ⭐
@@ -145,35 +141,22 @@ const PayOutRequestTable = () => {
       key: "action",
       render: (_, record) => (
         <div className="flex gap-2">
-
           {record.status === "Pending" && (
             <>
               <Popconfirm
                 title="Approve this payout?"
-                onConfirm={() =>
-                  handleStatusChange(record.key, "Completed")
-                }
+                onConfirm={() => handleStatusChange(record.key, "Completed")}
               >
-                <Button
-                  type="primary"
-                  size="small"
-                  loading={actionLoading}
-                >
+                <Button type="primary" size="small" loading={actionLoading}>
                   Approve
                 </Button>
               </Popconfirm>
 
               <Popconfirm
                 title="Reject this payout?"
-                onConfirm={() =>
-                  handleStatusChange(record.key, "Rejected")
-                }
+                onConfirm={() => handleStatusChange(record.key, "Rejected")}
               >
-                <Button
-                  danger
-                  size="small"
-                  loading={actionLoading}
-                >
+                <Button danger size="small" loading={actionLoading}>
                   Reject
                 </Button>
               </Popconfirm>
@@ -181,15 +164,11 @@ const PayOutRequestTable = () => {
           )}
 
           {record.status === "Completed" && (
-            <span className="text-green-600 font-semibold">
-              Done
-            </span>
+            <span className="text-green-600 font-semibold">Done</span>
           )}
 
           {record.status === "Rejected" && (
-            <span className="text-red-600 font-semibold">
-              Rejected
-            </span>
+            <span className="text-red-600 font-semibold">Rejected</span>
           )}
         </div>
       ),
@@ -198,7 +177,6 @@ const PayOutRequestTable = () => {
 
   return (
     <div className="p-4 bg-white rounded-xl shadow-md mt-5">
-
       {/* ✅ Search */}
       <div className="mb-4 flex justify-between items-center">
         <Search

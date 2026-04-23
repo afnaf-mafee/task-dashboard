@@ -41,7 +41,7 @@ const AllTaskTable = () => {
   const columns = [
     { title: "Icon", dataIndex: "icon", render: (icon) => <span style={{ fontSize: 20 }}>{icon}</span> },
     { title: "Title", dataIndex: "title" },
-    { title: "Reward", dataIndex: "reward", render: (r) => `$${r}` },
+    // { title: "Reward", dataIndex: "reward", render: (r) => `$${r}` },
     { title: "Type", dataIndex: "type", render: (type) => <Tag color="blue">{type}</Tag> },
     { title: "Duration", dataIndex: "duration", render: (d) => `${d}s` },
     {

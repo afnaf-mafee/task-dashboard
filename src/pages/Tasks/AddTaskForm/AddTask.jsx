@@ -46,13 +46,13 @@ const AddTask = () => {
         </Form.Item>
 
         {/* Reward */}
-        <Form.Item label="Reward Amount">
+        {/* <Form.Item label="Reward Amount">
           <Controller
             name="reward"
             control={control}
             render={({ field }) => <InputNumber {...field} style={{ width: "100%" }} min={0} />}
           />
-        </Form.Item>
+        </Form.Item> */}
 
         {/* Label */}
         <Form.Item label="Button Label">
